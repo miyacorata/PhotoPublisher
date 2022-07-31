@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>PhotoPublisher</title>
+    <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
+    <script src="./ImagePublisher.js" defer></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css" integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: 'VL PGothic', sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+<section class="hero is-small is-info">
+    <div class="hero-body has-text-centered">
+        <p class="title">
+            PhotoPublisher
+        </p>
+        <p class="subtitle">
+            写真をタイトルとEXIFでいい感じにするやつ
+        </p>
+    </div>
+</section>
+
+<div class="columns is-desktop is-variable p-4">
+    <section class="column is-half-desktop">
+        <div class="box">
+            <h2 class="title is-4">画像データやタイトルの入力</h2>
+            <p class="subtitle is-6">画像データが外部に送信されることはありません</p>
+            <div class="file has-name is-fullwidth">
+                <label class="file-label">
+                    <input class="file-input" id="image-input" type="file" name="image" accept="image/jpeg">
+                    <span class="file-cta">
+                        <span class="file-icon"><i class="fas fa-upload"></i></span>
+                        <span class="file-label">写真を選択</span>
+                    </span>
+                    <span class="file-name" id="file-name">JPGが読み込めます</span>
+                </label>
+            </div>
+            <table class="table is-fullwidth mt-2">
+                <thead>
+                <tr><th>プロパティ</th><th class="has-text-right">値</th></tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>撮影日</td>
+                    <td class="has-text-right" id="DateTimeOriginal"></td>
+                </tr>
+                <tr>
+                    <td>カメラ</td>
+                    <td class="has-text-right" id="Model"></td>
+                </tr>
+                <tr>
+                    <td>レンズ</td>
+                    <td class="has-text-right" id="LensModel"></td>
+                </tr>
+                <tr>
+                    <td>焦点距離</td>
+                    <td class="has-text-right" id="FocalLength"></td>
+                </tr>
+                <tr>
+                    <td title="シャッタースピード">SS</td>
+                    <td class="has-text-right" id="ExposureTime"></td>
+                </tr>
+                <tr>
+                    <td>絞り</td>
+                    <td class="has-text-right" id="FNumber"></td>
+                </tr>
+                <tr>
+                    <td>ISO</td>
+                    <td class="has-text-right" id="ISOSpeedRatings"></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="field">
+                <label class="label" for="author">作者名</label>
+                <div class="control">
+                    <input id="author" class="input" type="text" placeholder="あなたのお名前は？">
+                </div>
+            </div>
+            <div class="field">
+                <label class="label" for="title">タイトル</label>
+                <div class="control">
+                    <input id="title" class="input" type="text" placeholder="写真に素敵な名前をつけましょう！">
+                </div>
+            </div>
+            <div class="field">
+                <label class="label" for="description">概要</label>
+                <div class="control">
+                    <input id="description" class="input" type="text" placeholder="撮影場所などを追記できます">
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="column is-half-desktop">
+        <div class="box">
+            <h2 class="title is-4">プレビュー</h2>
+            <p class="subtitle is-6">Twitterとかに投げるときはクリップボードにコピーしてください</p>
+            <canvas id="preview" width="1920" height="1280" style="width: 100%; background: lightgray"></canvas>
+            <p class="notification is-info is-light">
+                画像は縦横比を維持したまま横幅を1920pxにリサイズします。<br>
+                テキストのフォントはインストールされていれば
+                <a href="http://vlgothic.dicey.org/" target="_blank">VL Pゴシック</a>、
+                それ以外の場合はメイリオ(Windows系)かデフォルトフォントが使用されます。
+            </p>
+        </div>
+    </section>
+</div>
+
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>
+            <strong>PhotoPublisher</strong> by
+            <a href="https://github.com/miyacorata" target="_blank">K Miyano (miyacorata)</a><br>
+            <a href="https://github.com/miyacorata/PhotoPublisher" target="_blank">ソースコード</a>
+            は <a href="http://opensource.org/licenses/mit-license.php">MITライセンス</a> で利用可能です。
+        </p>
+        <p>
+            <strong>使用ライブラリ</strong><br>
+            CSS : <a href="https://bulma.io/" target="_blank">Bulma</a>,
+            EXIF : <a href="https://github.com/exif-js/exif-js" target="_blank">exif-js</a>
+        </p>
+    </div>
+</footer>
+
+</body>
+</html>
