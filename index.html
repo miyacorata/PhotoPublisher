@@ -100,8 +100,28 @@
     <section class="column is-half-desktop">
         <div class="box">
             <h2 class="title is-4">プレビュー</h2>
-            <p class="subtitle is-6">Twitterとかに投げるときはクリップボードにコピーしてください</p>
+            <p class="subtitle is-6">画像としてDLするかクリップボードにコピーすることができます。</p>
             <canvas id="preview" width="1920" height="1280" style="width: 100%; background: lightgray"></canvas>
+            <div class="buttons">
+                <button class="button" id="jpg-save">
+                    <span class="icon is-small">
+                        <i class="fas fa-download"></i>
+                    </span>
+                    <span>JPEGで保存</span>
+                </button>
+                <button class="button" id="png-save">
+                    <span class="icon is-small">
+                        <i class="fas fa-download"></i>
+                    </span>
+                    <span>PNGで保存</span>
+                </button>
+                <button class="button is-outlined" id="cb-copy">
+                    <span class="icon is-small">
+                        <i class="fas fa-clipboard"></i>
+                    </span>
+                    <span>クリップボードにコピー</span>
+                </button>
+            </div>
             <p class="notification is-info is-light">
                 画像は縦横比を維持したまま横幅を1920pxにリサイズします。<br>
                 テキストのフォントはインストールされていれば

@@ -30,7 +30,7 @@ const updatePreview = () => {
         console.dir(EXIF.getAllTags(this));
 
         // 撮影日
-        const dateRaw = String(EXIF.getTag(this, 'DateTimeOriginal')).split(' ');
+        const dateRaw = String(EXIF.getTag(this, 'DateTimeOriginal') ?? '').split(' ');
         document.getElementById('DateTimeOriginal').innerText = exifData['DateTimeOriginal']
             = dateRaw[0].replaceAll(':','/');
 
@@ -57,7 +57,7 @@ const updatePreview = () => {
         }
         commonTags.map((tag) => {
             document.getElementById(tag).innerText = exifData[tag] =
-                (prefix[tag] ?? '') + EXIF.getTag(this, tag) + (suffix[tag] ?? '');
+                (prefix[tag] ?? '') + (EXIF.getTag(this, tag) ?? '') + (suffix[tag] ?? '');
         });
 
         // canvas#preview に画像を表示
@@ -93,8 +93,9 @@ const updatePreview = () => {
             summary.push(document.getElementById('description').value);
             summary.push(exifData['DateTimeOriginal'] + '  ' + document.getElementById('author').value);
             summary.push(
-                exifData['Model'] + ' - ' + exifData['LensModel'] + ' (' + exifData['FocalLength'] + ') ' +
-                exifData['FNumber'] + ' ' + exifData['ExposureTime'] + ' ISO' + exifData['ISOSpeedRatings']
+                exifData['Model'] + ' - ' + exifData['LensModel'] + (exifData['LensModel'] ? ' - ' : ' ') +
+                exifData['FocalLength'] + ' ' + exifData['FNumber'] + ' ' +
+                exifData['ExposureTime'] + ' ISO' + exifData['ISOSpeedRatings']
             );
             console.dir(summary);
             summary.reverse().map((text) => {
@@ -109,7 +110,48 @@ const updatePreview = () => {
     });
 };
 
+const saveImage = function () {
+    const a = document.createElement('a');
+    const title = document.getElementById('title').value;
+    switch (this.type) {
+        case 'png':
+            a.href = preview.toDataURL('image/png', 100);
+            a.download = (title ? title : 'image')+'.png';
+            break;
+        case 'jpg':
+            a.href = preview.toDataURL('image/jpeg', 100);
+            a.download = (title ? title : 'image')+'.jpg';
+            break;
+        default:
+            throw '画像タイプが正しく指定できていないかもしれません';
+    }
+    a.click();
+}
+
+const copyImage = function () {
+    try {
+        preview.toBlob((blob) => {
+            const data = new ClipboardItem({
+                'image/png': blob
+            });
+            navigator.clipboard.write([data]).then(() => {
+                document.getElementById('cb-copy').classList.add('is-success');
+                setTimeout(() => {
+                    document.getElementById('cb-copy').classList.remove('is-success');
+                }, 1000);
+            });
+        }, 'image/png', 100);
+    } catch (e) {
+        alert("何らかのエラーが発生しました。\n開発者ツールで詳細を確認できます。");
+        console.dir(e);
+    }
+}
+
 document.getElementById('image-input').addEventListener('change', updatePreview);
 document.getElementById('author').addEventListener('change', updatePreview);
 document.getElementById('title').addEventListener('change', updatePreview);
 document.getElementById('description').addEventListener('change', updatePreview);
+
+document.getElementById('png-save').addEventListener('click', {handleEvent: saveImage, type: 'png'});
+document.getElementById('jpg-save').addEventListener('click', {handleEvent: saveImage, type: 'jpg'});
+document.getElementById('cb-copy').addEventListener('click', copyImage);
